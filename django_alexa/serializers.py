@@ -20,10 +20,13 @@ class BaseASKSerializer(serializers.Serializer):
 class ASKApplicationSerializer(BaseASKSerializer):
     applicationId = serializers.CharField(validators=[validate_app_ids])
 
+class ASKPermissionsSerializer(BaseASKSerializer):
+    consentToken = serializers.CharField(required=False)
 
 class ASKUserSerializer(BaseASKSerializer):
     userId = serializers.CharField()
-
+    accessToken = serializers.CharField(required=False)
+    permissions = ASKPermissionsSerializer()
 
 class ASKSessionSerializer(BaseASKSerializer):
     sessionId = serializers.CharField()
@@ -32,6 +35,8 @@ class ASKSessionSerializer(BaseASKSerializer):
     user = ASKUserSerializer()
     new = serializers.BooleanField()
 
+class ASKContextSerializer(BaseASKSerializer):
+    System = serializers.DictField(required=False, allow_null=True)
 
 class ASKIntentSerializer(BaseASKSerializer):
     name = serializers.CharField()
@@ -73,6 +78,7 @@ class ASKResponseSerializer(BaseASKSerializer):
 class ASKInputSerializer(BaseASKSerializer):
     version = serializers.FloatField(required=True)
     session = ASKSessionSerializer()
+    context = ASKContextSerializer()
     request = ASKRequestSerializer()
 
 
