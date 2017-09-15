@@ -26,7 +26,7 @@ class ASKPermissionsSerializer(BaseASKSerializer):
 class ASKUserSerializer(BaseASKSerializer):
     userId = serializers.CharField()
     accessToken = serializers.CharField(required=False)
-    permissions = ASKPermissionsSerializer()
+    permissions = ASKPermissionsSerializer(required=False)
 
 class ASKSessionSerializer(BaseASKSerializer):
     sessionId = serializers.CharField()
