@@ -15,11 +15,11 @@ try:
     from urllib.parse import urlparse
 except:
     from urlparse import urlparse
-
+from django_alexa.models import AlexaSkill
 log = logging.getLogger(__name__)
 
 
-ALEXA_APP_IDS = dict([(str(os.environ[envvar]), envvar.replace("ALEXA_APP_ID_", "")) for envvar in os.environ.keys() if envvar.startswith('ALEXA_APP_ID_')])
+ALEXA_APP_IDS = dict([(str(app['skill_id']), app['app_label']) for app in AlexaSkill.objects.values('skill_id', 'app_label').filter(active=True)])
 ALEXA_REQUEST_VERIFICATON = ast.literal_eval(os.environ.get('ALEXA_REQUEST_VERIFICATON', 'True'))
 
 
@@ -36,7 +36,8 @@ def validate_app_ids(value):
     """
     value - an alexa app id
     """
-    if value not in ALEXA_APP_IDS.keys():
+    valid_alexa_app_ids = [app['skill_id'] for app in AlexaSkill.objects.values('skill_id')]
+    if value not in valid_alexa_app_ids:
         msg = "{0} is not one of the valid alexa skills application ids for this service".format(value)
         raise InternalError(msg)
 
