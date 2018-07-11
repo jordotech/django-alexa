@@ -19,7 +19,11 @@ from django_alexa.models import AlexaSkill
 log = logging.getLogger(__name__)
 
 
-ALEXA_APP_IDS = dict([(str(app['skill_id']), app['app_label']) for app in AlexaSkill.objects.values('skill_id', 'app_label').filter(active=True)])
+try:
+    ALEXA_APP_IDS = dict([(str(app['skill_id']), app['app_label']) for app in AlexaSkill.objects.values('skill_id', 'app_label').filter(active=True)])
+except:
+    ALEXA_APP_IDS = {}
+
 ALEXA_REQUEST_VERIFICATON = ast.literal_eval(os.environ.get('ALEXA_REQUEST_VERIFICATON', 'True'))
 
 
