@@ -7,8 +7,8 @@ from rest_framework.status import HTTP_200_OK
 from django.http import HttpResponseBadRequest, HttpResponseForbidden
 from rest_framework.views import APIView
 from .serializers import ASKInputSerializer
-from .internal import ALEXA_APP_IDS, ResponseBuilder, IntentsSchema, validate_alexa_request, validate_response_limit
-
+from .internal import ResponseBuilder, IntentsSchema, validate_alexa_request, validate_response_limit
+from .models import AlexaSkill
 
 log = logging.getLogger(__name__)
 
@@ -49,6 +49,8 @@ class ASKView(APIView):
         log.info("Alexa Request Body: {0}".format(validated_data))
         intent_kwargs = {}
         session = validated_data['session']
+        ALEXA_APP_IDS = dict([(str(app['skill_id']), app['app_label']) for app in
+                              AlexaSkill.objects.values('skill_id', 'app_label').filter(active=True)])
         app = ALEXA_APP_IDS[session['application']['applicationId']]
         if validated_data["request"]["type"] == "IntentRequest":
             intent_name = validated_data["request"]["intent"]["name"]

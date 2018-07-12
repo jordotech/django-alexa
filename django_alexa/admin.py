@@ -5,6 +5,6 @@ from .models import AlexaSkill
 
 @admin.register(AlexaSkill)
 class AlexaSkillAdmin(admin.ModelAdmin):
-    list_display = ('id', 'name', 'created', 'app_label', 'skill_id')
-    list_filter = ('created',)
-    search_fields = ('name',)
+    list_display = ('id', 'name', 'active', 'created', 'app_label', 'skill_id')
+    list_filter = ('created', 'active',)
+    search_fields = ('name', 'active',)

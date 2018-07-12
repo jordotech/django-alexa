@@ -9,8 +9,12 @@ class AlexaSkill(models.Model):
                                  help_text="Enter the django app label this skill, needed to route incoming "
                                            "requests to the correct django app")
     created = models.DateTimeField(auto_now_add=True)
-    skill_id = models.CharField("API Key", max_length=100, )
+    skill_id = models.CharField("API Key", max_length=100, unique=True)
     active = models.BooleanField('Active', default=True)
+
+    class Meta:
+        verbose_name = 'Alexa Skill'
+        verbose_name_plural = 'Alexa Skills'
 
     def __str__(self):
         if self.pk:
